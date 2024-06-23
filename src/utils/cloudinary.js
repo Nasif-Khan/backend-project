@@ -19,19 +19,22 @@ const uploadOnCloudinary  = async (filePath) => {
             }
         )
 
-        console.log(`File uploaded on Cloudinary ${response}`);
+        console.log(`File uploaded on Cloudinary ${response.url}`);
         return response;
 
     } catch (error) {
         fs.unlinkSync(filePath); // Delete the file from the server if it is not uploaded on Cloudinary 
+        return null;
     } 
 }
 
 
 
 // Upload an image
-const uploadResult = await cloudinary.uploader.upload("https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg", {
-    public_id: "shoes"
-}).catch((error)=>{console.log(error)});
+// const uploadResult = await cloudinary.uploader.upload("https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg", {
+//     public_id: "shoes"
+// }).catch((error)=>{console.log(error)});
 
-console.log(uploadResult);
+// console.log(uploadResult);
+
+export {uploadOnCloudinary}

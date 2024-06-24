@@ -58,8 +58,8 @@ const userSchema = new mongoose.Schema(
 userSchema.pre("save" , async function(next){
     if(!this.isModified("password")) return next();
 
-    this.password = await bcrypt.hashSync(this.passsword, 10);
-    next();
+    this.password = await bcrypt.hash(this.password, 10)
+    next()
 })
 
 // Method: to check if the password is correct

@@ -38,7 +38,7 @@ const registerUser = asyncHandler(async (req, res) => {
     
     /* User.findOne({email}) */
 
-    const existingUser = User.findOne(
+    const existingUser = await User.findOne(
         { $or: [{email}, {username}]}
     )
     if (existingUser) {
@@ -71,7 +71,7 @@ const registerUser = asyncHandler(async (req, res) => {
     })
 
     // check if db have the user and then remove password and refresh token from response 
-    const createdUser = await  User.findById(user._id).select("-password -refreshToken");
+    const createdUser = await User.findById(user._id).select("-password -refreshToken");
 
     if (!createdUser) {
         throw new apiError(500, "Something went wrong while creating the user");

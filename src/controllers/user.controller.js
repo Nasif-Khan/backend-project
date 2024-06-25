@@ -18,7 +18,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // get user details from frontend
     const {fullName, email, username, password} = req.body
-    console.log(fullName, email, username, password)
+    // console.log(fullName, email, username, password)
 
     // validation
 
@@ -47,7 +47,13 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // Midlleware multer access to the files
     const avatarLocalPath = req.files?.avatar[0]?.path
-    const coverImageLocalPath = req.files?.coverImage[0]?.path
+    // const coverImageLocalPath = req.files?.coverImage[0]?.path
+
+   let coverImageLocalPath;
+   if(req.files && req.files.coverImage && req.files.coverImage[0]) {
+         coverImageLocalPath = req.files.coverImage[0].path
+    }
+
     if(!avatarLocalPath) {
         throw new apiError(400, "Avatar is required")
     }
@@ -80,10 +86,14 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // send response
     // API response
+    
+    // console.log(req.body);
+    // console.log(req.files);
 
     return res.status(201).json(
         new apiResponse(200, createdUser, "User registered successfully")
     );
+
 
 })
 

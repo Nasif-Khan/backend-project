@@ -37,7 +37,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // get user details from frontend
     const {fullName, email, username, password} = req.body
-    // console.log(fullName, email, username, password)
+    console.log(fullName, email, username, password)
 
     // validation
 
@@ -63,10 +63,16 @@ const registerUser = asyncHandler(async (req, res) => {
     if (existingUser) {
         throw new apiError(400, "User with same username or email already exists");
     }
-
+    
     // Midlleware multer access to the files
-    const avatarLocalPath = req.files?.avatar[0]?.path
+    // const avatarLocalPath = req.files?.avatar[0]?.path
     // const coverImageLocalPath = req.files?.coverImage[0]?.path
+    // console.log(req.body);
+
+    let avatarLocalPath;
+    if(req.files && req.files.avatar && req.files.avatar[0]) {
+        avatarLocalPath = req.files.avatar[0].path
+    }
 
    let coverImageLocalPath;
    if(req.files && req.files.coverImage && req.files.coverImage[0]) {
@@ -80,6 +86,7 @@ const registerUser = asyncHandler(async (req, res) => {
     // Upload to cloudinary
     const avatar = await uploadOnCloudinary(avatarLocalPath)
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+
 
     if(!avatar) {
         throw new apiError(500, "Avatar upload failed")
@@ -187,7 +194,6 @@ const logoutUser = asyncHandler(async (req, res) => {
     const options = {
         httpOnly: true,
         secure: true,
-        expires: new Date(0)
     }
 
     return res

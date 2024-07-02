@@ -297,13 +297,15 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         throw new apiError(400, "Avatar is required")
     }
 
+    // TODO: delete the previous avatar from cloudinary
+
     const avatar = await uploadOnCloudinary(avatarLocalPath)
 
     if(!avatar) {
         throw new apiError(400, "Error while uploading avatar")
     }
 
-    const user = User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
         req.user?._id, 
         {
             $set: {
@@ -333,7 +335,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
         throw new apiError(400, "Error while uploading cover image")
     }
 
-    const user = User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
         req.user?._id, 
         {
             $set: {
